@@ -31,3 +31,16 @@ Then to activate your `pipenv` just run:
 ```shell
 pipenv shell
 ```
+
+## Running
+
+Once you have your pipenv shell, just export the flask app to your environment variable in the project's root folder:
+
+```shell
+export FLASK_APP=application.py
+export FLASK_DEBUG=True
+
+#run flask app
+flask run
+
+```
