@@ -4,7 +4,7 @@ import requests
 import json
 import os
 
-SLACK_BOT_OAUTH_TOKEN = os.environ['SLACK_BOT_OAUTH_TOKEN']
+#SLACK_BOT_OAUTH_TOKEN = os.environ['SLACK_BOT_OAUTH_TOKEN']
 
 @application.route('/')
 def index():
