@@ -15,6 +15,10 @@ pylint = "*"
 flask = "*"
 requests = "*"
 gunicorn = "*"
+flask-sqlalchemy = "*"
+flask-restless = "*"
+flask-migrate = "*"
+"psycopg2" = "*"
 
 
 [requires]
