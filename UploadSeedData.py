@@ -19,7 +19,7 @@ class UploadSeedData:
         
         for i, entry in enumerate(data):
             Dictionary[i] = entry
-            data_to_insert = Log(id=entry['id'], user_id=entry['user_id'], date=entry['date'])
+            data_to_insert = Log(user_id=entry['user_id'], date=entry['date'])
             print(entry)
 
             try:

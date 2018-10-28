@@ -41,7 +41,8 @@ def inbound():
                 db.session.add(enter_log)
                 db.session.commit()
                 db.session.close()
-            except:
+            except Exception as e:
+                print(e)
                 db.session.rollback()
 
             response_dict = {
