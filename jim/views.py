@@ -5,6 +5,7 @@ import json
 import os
 from sqlalchemy import func
 from jim.models import Log
+from datetime import datetime
 
 #SLACK_BOT_OAUTH_TOKEN = os.environ['SLACK_BOT_OAUTH_TOKEN']
 
@@ -34,6 +35,14 @@ def inbound():
         if slash_message_text == "$5":
             escaped_channelid = '<@%s>' % (channel_id)
             escaped_userid = '<@%s>' % (user_id)
+            
+            enter_log = Log(user_id=user_id, date=datetime.now())
+            try:
+                db.session.add(enter_log)
+                db.session.commit()
+                db.session.close()
+            except:
+                db.session.rollback()
 
             response_dict = {
                 "response_type": "in_channel",
