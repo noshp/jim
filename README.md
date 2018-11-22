@@ -37,6 +37,12 @@ The following environment variables must be set for local testing
 
 To spin up local Postgres, required for local testing, run project's docker script.
 
+Install docker and docker-compose specific to your [OS](https://docs.docker.com/install/)
+Then in the project root folder run:
+```shell
+docker-compose -f docker-compose.yml up -d --build
+```
+
 ## Running
 
 Once you have your pipenv shell, just export the flask app to your environment variable in the project's root folder:
@@ -55,6 +61,12 @@ flask run
 ```shell
 SET FLASK_APP=application.py
 SET FLASK_DEBUG=True
+
+# First time running of the app 
+# migrate and upgrade your database
+flask db migrate
+
+flask db upgrade
 
 #run flask app
 flask run
