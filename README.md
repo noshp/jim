@@ -33,7 +33,7 @@ pipenv shell
 ```
 
 The following environment variables must be set for local testing
-- *APP_ENV* - set to "DEV" on local machine
+- `APP_ENV` - set to "DEV" on local machine
 
 To spin up local Postgres, required for local testing, run project's docker script.
 
