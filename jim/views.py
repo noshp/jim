@@ -1,6 +1,7 @@
 from flask import render_template, request, Response, jsonify
 from . import application, db
 import requests
+import random
 import json
 import os
 from sqlalchemy import func
@@ -16,6 +17,13 @@ def get_stats():
     for stat in statQuery:
         return_string += '<@%s>: $%s \n' % (stat[0], str(stat[1] * 5))
     return return_string
+	
+def get_quote():
+	num_lines = sum(1 for line in open("../quotes.txt"))
+	random_quote_index = random.randint(-1, num_lines)
+	random_quote = open("../quotes.txt")[random_quote_index]
+	return random_quote
+	
 
 @application.route('/')
 def index():
@@ -28,7 +36,7 @@ def inbound():
     channel_id = request.form['channel_id']
     response_url = request.form['response_url']
     slash_message_text = request.form['text']
-    commands = ["$5", "stats"]
+    commands = ["$5", "stats", "inspire me"]
 
     if slash_message_text in commands:
 
@@ -63,9 +71,19 @@ def inbound():
             headers = {'content-type': 'application/json'}
             r = requests.post(response_url, headers=headers, data=json.dumps(response_payload))
             return("", 200)
+			
+		elif slash_message_text == "inspire me":
+            quote_string = get_quote()
+            response_payload = {
+                "response_type" : "in_channel",
+                "text": stats_string
+            }
+            headers = {'content-type': 'application/json'}
+            r = requests.post(response_url, headers=headers, data=json.dumps(response_payload))
+            return("", 200)
             
     else:
-        return("Sorry i'm not programmed for that commad", 500)
+        return("Sorry, I'm not programmed for that command yet.", 500)
 
 @application.route('/stats', methods=['GET'])
 def stats():
