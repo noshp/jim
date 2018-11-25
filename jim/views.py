@@ -17,13 +17,13 @@ def get_stats():
     for stat in statQuery:
         return_string += '<@%s>: $%s \n' % (stat[0], str(stat[1] * 5))
     return return_string
-	
+
 def get_quote():
-	num_lines = sum(1 for line in open("../quotes.txt"))
-	random_quote_index = random.randint(-1, num_lines)
-	random_quote = open("../quotes.txt")[random_quote_index]
-	return random_quote
-	
+    num_lines = sum(1 for line in open("../quotes.txt"))
+    random_quote_index = random.randint(-1, num_lines)
+    random_quote = open("../quotes.txt")[random_quote_index]
+    return random_quote
+
 
 @application.route('/')
 def index():
@@ -62,6 +62,7 @@ def inbound():
             r = requests.post(response_url, headers=headers, data=json.dumps(response_dict))
             
             return("",200)
+
         elif slash_message_text == "stats":
             stats_string = get_stats()
             response_payload = {
@@ -71,12 +72,12 @@ def inbound():
             headers = {'content-type': 'application/json'}
             r = requests.post(response_url, headers=headers, data=json.dumps(response_payload))
             return("", 200)
-			
-		elif slash_message_text == "inspire me":
+            
+        elif slash_message_text == "inspire me":
             quote_string = get_quote()
             response_payload = {
                 "response_type" : "in_channel",
-                "text": stats_string
+                "text": quote_string
             }
             headers = {'content-type': 'application/json'}
             r = requests.post(response_url, headers=headers, data=json.dumps(response_payload))
