@@ -19,9 +19,7 @@ def get_stats():
     return return_string
 
 def get_quote():
-    num_lines = sum(1 for line in open("../quotes.txt"))
-    random_quote_index = random.randint(-1, num_lines)
-    random_quote = open("../quotes.txt")[random_quote_index]
+    random_quote = random.choice(list(open('../quotes.txt')))
     return random_quote
 
 
