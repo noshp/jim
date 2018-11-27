@@ -40,7 +40,11 @@ To spin up local Postgres, required for local testing, run project's docker scri
 Install docker and docker-compose specific to your [OS](https://docs.docker.com/install/)
 Then in the project root folder run:
 ```shell
+# build and run the postgres container
 docker-compose -f docker-compose.yml up -d --build
+
+# to stop the container
+docker-compose -f docker-compose.yml down
 ```
 
 ## Running
@@ -63,6 +67,7 @@ SET FLASK_APP=application.py
 SET FLASK_DEBUG=True
 
 # First time running of the app 
+flask db init
 # migrate and upgrade your database
 flask db migrate
 
@@ -85,13 +90,3 @@ User types `/jim 5$`
 2. Jim returns angry message chastizing the user, and 200 code
 
 User types `/jim` and something not above, and jim responds with 500
-
-
-
-
-
-
-	
-	
-		
-	
