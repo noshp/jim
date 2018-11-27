@@ -5,7 +5,7 @@ It records the the day missed and adds $5 to the truancy pot.
 
 ## Development
 
-This project is using new spanking new python development workflow `pipenv`.
+This project is using the spanking python development workflow `pipenv`.
 `pipenv` is here to combine the whole `requirements.txt`, `virtualenv` rituals we've been doing to
 setup a python project.
 
