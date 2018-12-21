@@ -19,7 +19,8 @@ def get_stats():
     return return_string
 
 def get_quote():
-    random_quote = random.choice(list(open('../quotes.txt')))
+    rootdir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    random_quote = random.choice(list(open(rootdir + '/quotes.txt')))
     return random_quote
 
 
@@ -75,7 +76,7 @@ def inbound():
             quote_string = get_quote()
             response_payload = {
                 "response_type" : "in_channel",
-                "text": quote_string
+                "text": ">" + quote_string
             }
             headers = {'content-type': 'application/json'}
             r = requests.post(response_url, headers=headers, data=json.dumps(response_payload))
