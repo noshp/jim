@@ -56,6 +56,12 @@ Once you have your pipenv shell, just export the flask app to your environment v
 export FLASK_APP=application.py
 export FLASK_DEBUG=True
 
+*Windows Powershell*
+```shell
+$env:APP_ENV="DEV"
+$env:FLASK_APP=".\application.py"
+$env:FLASK_DEBUG="True"
+```
 #run flask app
 flask run
 

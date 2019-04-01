@@ -5,7 +5,7 @@ import random
 import json
 import os
 from sqlalchemy import func
-from jim.models import Log
+from jim.models import Log, ArchiveStats
 from datetime import datetime
 
 #SLACK_BOT_OAUTH_TOKEN = os.environ['SLACK_BOT_OAUTH_TOKEN']
@@ -13,10 +13,14 @@ from datetime import datetime
 #Helper functions
 def get_stats():
     statQuery = db.session.query(Log.user_id, func.count(Log.user_id)).group_by(Log.user_id).all()
-    return_string = "Current stats: \n"
-    for stat in statQuery:
-        return_string += '<@%s>: $%s \n' % (stat[0], str(stat[1] * 5))
-    return return_string
+    if len(statQuery) > 0:
+        return_string = ""
+        for stat in statQuery:
+            return_string += '<@%s>: $%s \n' % (stat[0], str(stat[1] * 5))
+        return return_string
+    else:
+        return "*Clean slate yall, let's keep it this way*"
+        
 
 def get_quote():
     rootdir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -35,7 +39,7 @@ def inbound():
     channel_id = request.form['channel_id']
     response_url = request.form['response_url']
     slash_message_text = request.form['text']
-    commands = ["$5", "stats", "inspire me"]
+    commands = ["$5", "stats", "inspire me", "reset stats"]
 
     if slash_message_text in commands:
 
@@ -63,7 +67,7 @@ def inbound():
             return("",200)
 
         elif slash_message_text == "stats":
-            stats_string = get_stats()
+            stats_string = "Current stats: \n" + get_stats()
             response_payload = {
                 "response_type" : "in_channel",
                 "text": stats_string
@@ -81,6 +85,41 @@ def inbound():
             headers = {'content-type': 'application/json'}
             r = requests.post(response_url, headers=headers, data=json.dumps(response_payload))
             return("", 200)
+
+        elif slash_message_text == "reset stats":
+            statGroupQuery = db.session.query(Log.user_id, func.count(Log.user_id)).group_by(Log.user_id).all()
+            return_payload = []
+            for stat in statGroupQuery:
+                return_payload.append({
+                    "user_id": stat[0],
+                    "total_contributtion": stat[1] * 5
+                })
+            stats_string = "*ARCHIVED THE STATS TODAY* \n" + get_stats()
+            
+            return_payload = {"archived_stats":return_payload}
+            archivePayload = ArchiveStats(date=datetime.now(),stats=json.dumps(return_payload))
+
+            try:
+                db.session.add(archivePayload)
+                db.session.query(Log).delete()
+                db.session.commit()
+                db.session.close()
+                response_payload = {
+                    "response_type" : "in_channel",
+                    "text": stats_string
+                }
+                headers = {'content-type': 'application/json'}
+                r = requests.post(response_url, headers=headers, data=json.dumps(response_payload))
+                return("", 200)
+            except Exception as e:
+                db.session.rollback()
+                response_payload = {
+                    "response_type" :"in_channel",
+                    "text": "Failed to archive stats"
+                }
+                headers = {'content-type': 'application/json'}
+                r = requests.post(response_url, headers=headers, data=json.dumps(response_payload))
+                return("", 200)
             
     else:
         return("Sorry, I'm not programmed for that command yet.", 500)
@@ -95,3 +134,14 @@ def stats():
             "total_contribution": stat[1] * 5
         })
     return(jsonify({"current_stats": return_payload}),200)
+
+@application.route('/archived_stats', methods=['GET'])
+def archived_stats():
+    archiveQuery = db.session.query(ArchiveStats).all()
+    return_payload =[]
+    for stat in archiveQuery:
+        return_payload.append({
+            "date": stat.date,
+            "archived_stats": json.loads(stat.stats)
+        })
+    return(jsonify({"archived": return_payload}), 200)
