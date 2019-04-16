@@ -103,7 +103,8 @@ venv.bak/
 # mypy
 .mypy_cache/
 
-.DS_Stor
+data/
+.DS_Store
 
 # misc
 test.py
