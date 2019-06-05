@@ -13,7 +13,7 @@ gunicorn = "*"
 flask-sqlalchemy = "*"
 flask-restless = "*"
 flask-migrate = "*"
-"psycopg2" = "*"
+"psycopg2-binary" = "*"
 autopep8 = "*"
 flask-cli = "*"
 
