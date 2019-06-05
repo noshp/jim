@@ -15,6 +15,7 @@ flask-restless = "*"
 flask-migrate = "*"
 "psycopg2" = "*"
 autopep8 = "*"
+flask-cli = "*"
 
 [requires]
 python_version = "3.7"

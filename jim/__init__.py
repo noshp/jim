@@ -17,8 +17,3 @@ migrate = Migrate(application, db)
 
 from jim import views
 from jim.models import *
-
-#Create the flask-restless api manager
-manager = APIManager(application, flask_sqlalchemy_db=db)
-
-manager.create_api(Log, methods=['GET'])
