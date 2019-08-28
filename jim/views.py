@@ -1,5 +1,5 @@
-from flask import render_template, request, Response, jsonify
-from . import application, db
+from flask import render_template, request, Response, jsonify, Blueprint
+from jim import db
 import requests
 import random
 import json
@@ -10,6 +10,7 @@ from datetime import datetime
 
 #SLACK_BOT_OAUTH_TOKEN = os.environ['SLACK_BOT_OAUTH_TOKEN']
 
+api_blueprint = Blueprint('api', __name__, template_folder='./templates')
 #Helper functions
 def get_stats():
     statQuery = db.session.query(Log.user_id, func.count(Log.user_id)).group_by(Log.user_id).all()
@@ -27,12 +28,18 @@ def get_quote():
     random_quote = random.choice(list(open(rootdir + '/quotes.txt')))
     return random_quote
 
+@api_blueprint.route('/api/ping', methods=['GET'])
+def ping_pong():
+    return jsonify({
+        'status': 'success',
+        'message': 'pong!' 
+    })
 
-@application.route('/')
+@api_blueprint.route('/', methods=['GET'])
 def index():
     return render_template('index.html')
 
-@application.route('/slack', methods=['POST'])
+@api_blueprint.route('/api/slack', methods=['POST'])
 def inbound():
 
     user_id = request.form['user_id']
@@ -124,7 +131,7 @@ def inbound():
     else:
         return("Sorry, I'm not programmed for that command yet.", 500)
 
-@application.route('/stats', methods=['GET'])
+@api_blueprint.route('/api/stats', methods=['GET'])
 def stats():
     statQuery = db.session.query(Log.user_id, func.count(Log.user_id)).group_by(Log.user_id).all()
     return_payload = []
@@ -135,7 +142,7 @@ def stats():
         })
     return(jsonify({"current_stats": return_payload}),200)
 
-@application.route('/archived_stats', methods=['GET'])
+@api_blueprint.route('/api/archived_stats', methods=['GET'])
 def archived_stats():
     archiveQuery = db.session.query(ArchiveStats).all()
     return_payload =[]

@@ -16,6 +16,10 @@ flask-migrate = "*"
 "psycopg2-binary" = "*"
 autopep8 = "*"
 flask-cli = "*"
+flask-cors = "*"
+coverage = "*"
+flask-bcrypt = "*"
+"flake8" = "*"
 
 [requires]
 python_version = "3.7"

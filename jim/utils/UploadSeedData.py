@@ -1,6 +1,6 @@
 import json, os
 from pprint import pprint
-from jim import application, db
+from jim import db
 from jim.models import Log
 
 class UploadSeedData:
