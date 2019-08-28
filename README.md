@@ -108,6 +108,7 @@ docker-compose -f docker-compose.yml down
 ## Running
 
 Once you have your pipenv shell, just export the flask app to your environment variable in the project's root folder:
+
 *Shell*
 ```shell
 export FLASK_APP=application.py
