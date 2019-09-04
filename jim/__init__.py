@@ -21,7 +21,7 @@ def create_app(script_info=None):
     db.init_app(app)
     migrate.init_app(app, db)
 
-    from jim.views import api_blueprint
+    from jim.api import api_blueprint
     app.register_blueprint(api_blueprint)
 
     # Shell context for flask cli
