@@ -8,6 +8,7 @@ It records the the day missed and adds $5 to the truancy pot.
 The project uses docker for a containerized workflow, currently there are 2 services:
 * jim(Flask app) - this is the backend service which connects with the database, built using the Flask python framework
 * db(postgres db) - this is the database used for storing all of the data
+* nginx(web server) - this is the webserver, which can also be used as a reverse proxy
 
 ## Local Development
 Each service is built and deployed through Docker. We use `docker-compose` to orchestrate all the services together. See the Docker [site](https://docs.docker.com/install) for OS specific installation.
@@ -19,7 +20,7 @@ To run and build all the multiple services, they are defined as a separate docke
 In the project root folder build the docker containers using `docker-compose.yml` in your terminal:
 ```shell
 #build the docker containers
-docker-compose -f docker-compose.yml up -d --buil
+docker-compose -f docker-compose.yml up -d --build
 
 # For first time setup recreate and seed the db for backed api
 docker-compose -f docker-compose.yml run jim python manage.py recreate-db
@@ -27,7 +28,8 @@ docker-compose -f docker-compose.yml run jim python manage.py recreate-db
 docker-compose -f docker-compose.yml run jim python manage.py seed-db
 ```
 
-Once the containers are built you can check if the app is running on your browser at [http://localhost:5001/](http://localhost:5001/)
+Once the containers are built you can check if the app is running on your browser at [http://localhost/](http://localhost/)
+Jim's api lives under at `/api` for status check you can go to [http://localhost/api/](http://localhost/api/)
 
 **Shutting the containers down**
 
