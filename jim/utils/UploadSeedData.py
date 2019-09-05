@@ -5,7 +5,7 @@ from jim.models import Log
 
 class UploadSeedData:
     rootdir = os.path.dirname(os.path.abspath(__file__))
-    datadir = rootdir + '/data/'
+    datadir = rootdir + '/seed-data/'
     def __init__(self, filename):
         self.filename = filename
         self.datadir = UploadSeedData.datadir
