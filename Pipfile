@@ -1,26 +1,25 @@
 [[source]]
-
 url = "https://pypi.python.org/simple"
 verify_ssl = true
 name = "pypi"
 
-
 [dev-packages]
-
 pylint = "*"
 
-
 [packages]
-
 flask = "*"
 requests = "*"
 gunicorn = "*"
 flask-sqlalchemy = "*"
 flask-restless = "*"
 flask-migrate = "*"
-"psycopg2" = "*"
-
+"psycopg2-binary" = "*"
+autopep8 = "*"
+flask-cli = "*"
+flask-cors = "*"
+coverage = "*"
+flask-bcrypt = "*"
+"flake8" = "*"
 
 [requires]
-
 python_version = "3.7"

@@ -2,23 +2,30 @@ from flask import Flask, render_template, make_response, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_restless import APIManager
 from flask_migrate import Migrate
-from . import Config
 import os
 
-application = Flask(__name__)
+# instantiate the db
+db = SQLAlchemy()
+migrate = Migrate()
 
-if os.getenv('APP_ENV') == 'DEV':
-    application.config.from_object(Config.DevelopmentConfig)
-elif os.getenv('APP_ENV') == 'PROD':
-    application.config.from_object(Config.ProductionConfig)
+def create_app(script_info=None):
 
-db = SQLAlchemy(application)
-migrate = Migrate(application, db)
+    # instantiate the app
+    app = Flask(__name__)
 
-from jim import views
-from jim.models import *
+    # set config
+    app_settings = os.getenv('APP_SETTINGS')
+    app.config.from_object(app_settings)
 
-#Create the flask-restless api manager
-manager = APIManager(application, flask_sqlalchemy_db=db)
+    # set up extensions
+    db.init_app(app)
+    migrate.init_app(app, db)
 
-manager.create_api(Log, methods=['GET'])
+    from jim.api import api_blueprint
+    app.register_blueprint(api_blueprint)
+
+    # Shell context for flask cli
+    @app.shell_context_processor
+    def ctx():
+        return {'app': app, 'db': db}
+    return app

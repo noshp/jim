@@ -1,11 +1,39 @@
 version: '3.1'
 
 services:
-  postgres:
-    image: postgres
+  jim:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    volumes:
+      - './:/usr/src/app'
+    expose:
+      - '5000'
+    environment:
+      - FLASK_ENV=development
+      - SECRET_KEY=supersecretkey
+      - APP_SETTINGS=jim.config.DevelopmentConfig
+      - DATABASE_URL=postgres://postgres:postgres@jim-db:5432/jim_dev
+      - DATABASE_TEST_URL=postgres://postgres:postgres@jim-db:5432/jim_test
+    depends_on:
+      - jim-db
+      
+  jim-db:
+    build:
+      context: ./db
+      dockerfile: Dockerfile
+    ports:
+      - 5435:5432
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+  
+  nginx:
+    build:
+      context: ./nginx
+      dockerfile: Dockerfile
     restart: always
     ports:
-      - 5432:5432
-    environment:
-      POSTGRES_DB: jim
-      POSTGRES_USER: postgres
+      - 80:80
+    depends_on:
+      - jim
