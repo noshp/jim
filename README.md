@@ -20,29 +20,16 @@ To run and build all the multiple services, they are defined as a separate docke
 In the project root folder build the docker containers using `docker-compose.yml` in your terminal:
 ```shell
 #build the docker containers
-docker-compose -f docker-compose.yml up -d --build
+docker-compose up --build
 
 # For first time setup recreate and seed the db for backed api
-docker-compose -f docker-compose.yml run jim python manage.py recreate-db
+docker-compose run jim python manage.py recreate-db
 
-docker-compose -f docker-compose.yml run jim python manage.py seed-db
+docker-compose run jim python manage.py seed-db
 ```
 
 Once the containers are built you can check if the app is running on your browser at [http://localhost/](http://localhost/)
 Jim's api lives under at `/api` for status check you can go to [http://localhost/api/](http://localhost/api/)
-
-**Shutting the containers down**
-
-To stop all the containers running from the docker-compose file:
-```shell
-docker-compose -f docker-compose.yml down
-```
-
-While working on the project any major changes to the application in the backend/frontend will require a rebuild of the containers:
-
-```shell
-docker-compose -f docker-compose.yml up -d --build
-```
 
 ## Development Workflow
 Please when always working on a new feature checkout a new branch from the latest `master` branch and when submitting Pull Requests please submit PRs to the `development` branch from the feature branch you are working off.
